@@ -25,14 +25,16 @@ struct ip4_address {
 #define DOT_DECM(ip) OCT1(ip),OCT2(ip),OCT3(ip),OCT4(ip)
 
 /*
- * checks validity of a given octet, used during translating input when called
- * by read_data(). returns 0 on success and an error code on failure
+ * checks validity of a given octet, used during translation of input when
+ * called by read_data()
+ * returns 0 on success and an error code on failure
  */
 int value_valid(int);
 
 /*
  * checks validity of a given address in text format, called by read_data()
- * before translation. returns 0 on success and an error code on failure
+ * before translation
+ * returns 0 on success and an error code on failure
  */
 int format_valid(char *);
 
@@ -61,15 +63,15 @@ void get_network_class(struct ip4_address *);
 void get_scope(struct ip4_address *);
 
 /*
- * prints relevant information that can be inferred form a given ip address
- * and optionally the provided mask
+ * prints to standard output relevant information that can be inferred form
+ * a given ip address and the optionally provided mask
  */
 void get_info(struct ip4_address *);
 
 
 int main(int argc, char *argv[])
 {
-	struct ip4_address ip4 = {.addr = 0, .mask = 0}; //should be already initialized to 0
+	struct ip4_address ip4 = {.addr = 0, .mask = 0};
 
 	if(read_data(&ip4, argv[1], 1)) {
 		printf("Invalid IP address!\n");
@@ -163,7 +165,7 @@ int demask(struct ip4_address *address, char *input) //rework, is fuucked
 		}
 	}
 
-	//leftshift a set of all 1's by complement of prefix to obitain a mask
+	//leftshift a set of all 1's by complement of prefix to obtain a mask
 	address->mask = (~0)<<(32-prefix);
 	return 0;
 }
@@ -223,13 +225,13 @@ void get_info (struct ip4_address * address) {
 
 
 	//filling in missing data
-	//obitain network address
+	//obtain network address
 	address->network = address->addr & address->mask;
 
-	//obitain network broadcast address
+	//obtain network broadcast address
 	address->broadcast = address->network | ~address->mask;
 
-	//infer address scope
+	//infer the scope of the address
 	get_scope(address);
 
 	printf("Address: "DOT_FORMAT"\n"
